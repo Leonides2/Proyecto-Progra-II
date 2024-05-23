@@ -1,6 +1,6 @@
-﻿namespace Proyecto_Progra_II.Entities
+﻿namespace Proyecto_Progra_II.Models.Custom
 {
-    public class UserResponse
+    public class UsuarioResponse
     {
         public string Token { get; set; }
 
