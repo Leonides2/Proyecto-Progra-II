@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Proyecto_Progra_II;
+namespace Proyecto_Progra_II.Models;
 
 public partial class Cita
 {

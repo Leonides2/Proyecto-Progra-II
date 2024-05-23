@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Proyecto_Progra_II;
+namespace Proyecto_Progra_II.Models;
 
 public partial class ApiContext : DbContext
 {
@@ -25,15 +25,13 @@ public partial class ApiContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost; DataBase=API; Trusted_Connection=True; TrustServerCertificate=True;");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Cita>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__citas__3214EC27A81C820F");
+            entity.HasKey(e => e.Id).HasName("PK_Cita");
 
             entity.ToTable("citas");
 
@@ -46,22 +44,22 @@ public partial class ApiContext : DbContext
             entity.HasOne(d => d.IdEspecialidadNavigation).WithMany(p => p.Cita)
                 .HasForeignKey(d => d.IdEspecialidad)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__citas__IdEspecia__412EB0B6");
+                .HasConstraintName("FK_Especialidad_Cita");
 
             entity.HasOne(d => d.IdEstadoNavigation).WithMany(p => p.Cita)
                 .HasForeignKey(d => d.IdEstado)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__citas__IdEstado__4222D4EF");
+                .HasConstraintName("FK_Estado_Cita");
 
             entity.HasOne(d => d.IdPacienteNavigation).WithMany(p => p.Cita)
                 .HasForeignKey(d => d.IdPaciente)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__citas__IdPacient__403A8C7D");
+                .HasConstraintName("FK_Usuario_Cita");
         });
 
         modelBuilder.Entity<Especialidade>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__especial__3214EC27C6DBB873");
+            entity.HasKey(e => e.Id).HasName("PK_Especialidad");
 
             entity.ToTable("especialidades");
 
@@ -73,7 +71,7 @@ public partial class ApiContext : DbContext
 
         modelBuilder.Entity<EstadosCita>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__estadosC__3214EC2774CF54CC");
+            entity.HasKey(e => e.Id).HasName("PK_EstadoCita");
 
             entity.ToTable("estadosCitas");
 
@@ -85,7 +83,7 @@ public partial class ApiContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__roles__3214EC27D8E3895D");
+            entity.HasKey(e => e.Id).HasName("PK_Rol");
 
             entity.ToTable("roles");
 
@@ -97,7 +95,7 @@ public partial class ApiContext : DbContext
 
         modelBuilder.Entity<Usuario>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__usuarios__3214EC2714C6AFD6");
+            entity.HasKey(e => e.Id).HasName("PK_Usuario");
 
             entity.ToTable("usuarios");
 
@@ -116,7 +114,7 @@ public partial class ApiContext : DbContext
             entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.Usuarios)
                 .HasForeignKey(d => d.IdRol)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__usuarios__IdRol__398D8EEE");
+                .HasConstraintName("FK_Rol_Usuario");
         });
 
         OnModelCreatingPartial(modelBuilder);

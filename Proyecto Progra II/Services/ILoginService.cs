@@ -3,8 +3,8 @@ using Proyecto_Progra_II.Models;
 using Proyecto_Progra_II.Models.Custom;
 namespace Proyecto_Progra_II.Services
 {
-    public interface IUserService
+    public interface ILoginService
     {
-        //Task<Usuario> ReturnToken(UsuarioResponse response);
+        Task<UsuarioResponse> ReturnToken(UsuarioRequest request);
     }
 }
