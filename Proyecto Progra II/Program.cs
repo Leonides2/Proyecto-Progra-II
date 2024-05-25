@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Proyecto_Progra_II.Services.Login;
 using Proyecto_Progra_II.Services.Citas;
 using Proyecto_Progra_II.Services.Usuarios;
+using Proyecto_Progra_II.Services.Especialidades;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,8 +30,7 @@ builder.Services.AddDbContext<ApiContext>(opt =>
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ICitasService, CitasService>();
 builder.Services.AddScoped<IUsuariosService, UsuariosService>();
-
-
+builder.Services.AddScoped<IEspecialidadService,EspecialidadService>();
 
 
 var key = builder.Configuration.GetValue<string>("JwtSettings:key");

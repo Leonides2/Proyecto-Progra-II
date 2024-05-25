@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Proyecto_Progra_II.Models;
+using Proyecto_Progra_II.Services.Especialidades;
 
 namespace Proyecto_Progra_II.Controllers
 {
@@ -13,14 +14,30 @@ namespace Proyecto_Progra_II.Controllers
     [ApiController]
     public class EspecialidadesController : ControllerBase
     {
-        private readonly ApiContext _context;
+        private readonly IEspecialidadService _especialidadesService;
 
-        public EspecialidadesController(ApiContext context)
+        public EspecialidadesController(IEspecialidadService especialidad)
         {
-            _context = context;
+            _especialidadesService = especialidad;
         }
 
         // GET: api/Especialidades
+
+        public async Task<IActionResult> GetEspecialidades()
+        {
+
+        }
+        public async Task<IActionResult> GetEspecialidades(int id)
+        {
+
+        }
+
+        Task<Especialidad> PostEspecialidad(Especialidad especialidad);
+
+        Task<Especialidad> PutEspecidalidad(int id, Especialidad especialidad);
+        Task<Especialidad> DeleteEspecialidad(int id);
+
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Especialidad>>> GetEspecialidades()
         {
