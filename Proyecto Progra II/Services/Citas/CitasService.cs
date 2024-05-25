@@ -14,9 +14,18 @@ namespace Proyecto_Progra_II.Services.Citas
             _context = context;
         }
     
-        public Task<Cita> DeleteCita(int id)
+        async public Task<Cita> DeleteCita(int id)
         {
-            throw new NotImplementedException();
+            var cita = await _context.Citas.FindAsync(id);
+            if (cita == null)
+            {
+                return null;
+            }
+
+            _context.Citas.Remove(cita);
+            await _context.SaveChangesAsync();
+
+            return cita;
         }
 
         public async Task<List<Cita>> GetCitas()
