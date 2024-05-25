@@ -63,39 +63,24 @@ namespace Proyecto_Progra_II.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Cita>> PostCita(Cita cita)
+        public async Task<IActionResult> PostCita(Cita cita)
         {   
             var newCita = await _citasService.PostCita(cita);
 
-            return CreatedAtAction("GetCita", new { id = cita.Id }, cita);
+            return Ok(newCita);
         }
 
-
-        /*
-        // POST: api/Citas
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-  
-
-        // DELETE: api/Citas/5
-        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCita(int id)
         {
-            var cita = await _context.Citas.FindAsync(id);
+            var cita = await _citasService.DeleteCita(id);
             if (cita == null)
             {
                 return NotFound();
             }
 
-            _context.Citas.Remove(cita);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok("Cita deleted succesfully");
         }
 
-        private bool CitaExists(int id)
-        {
-            return _context.Citas.Any(e => e.Id == id);
-        }*/
     }
 }
