@@ -1,6 +1,5 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Proyecto_Progra_II.Models;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;

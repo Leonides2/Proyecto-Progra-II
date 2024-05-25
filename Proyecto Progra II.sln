@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proyecto Progra II", "Proyecto Progra II\Proyecto Progra II.csproj", "{0F965830-DB2C-4234-B36E-ED4ABC5FB121}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proyecto Progra II", "Proyecto Progra II\Proyecto Progra II.csproj", "{0F965830-DB2C-4234-B36E-ED4ABC5FB121}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{48509137-C17B-4794-8280-5D0A5181EB47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{CA0A67B9-B866-4792-AFA3-B14FE43D362E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{0F965830-DB2C-4234-B36E-ED4ABC5FB121}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F965830-DB2C-4234-B36E-ED4ABC5FB121}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F965830-DB2C-4234-B36E-ED4ABC5FB121}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48509137-C17B-4794-8280-5D0A5181EB47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48509137-C17B-4794-8280-5D0A5181EB47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48509137-C17B-4794-8280-5D0A5181EB47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48509137-C17B-4794-8280-5D0A5181EB47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA0A67B9-B866-4792-AFA3-B14FE43D362E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA0A67B9-B866-4792-AFA3-B14FE43D362E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA0A67B9-B866-4792-AFA3-B14FE43D362E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA0A67B9-B866-4792-AFA3-B14FE43D362E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -21,104 +21,63 @@ namespace Proyecto_Progra_II.Controllers
             _especialidadesService = especialidad;
         }
 
-        // GET: api/Especialidades
-
+        [HttpGet]
         public async Task<IActionResult> GetEspecialidades()
         {
+            var especialidades_request = await _especialidadesService.GetEspecialidades();
 
+            if (especialidades_request == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(especialidades_request);
         }
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetEspecialidades(int id)
         {
-
-        }
-
-        Task<Especialidad> PostEspecialidad(Especialidad especialidad);
-
-        Task<Especialidad> PutEspecidalidad(int id, Especialidad especialidad);
-        Task<Especialidad> DeleteEspecialidad(int id);
-
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Especialidad>>> GetEspecialidades()
-        {
-            return await _context.Especialidades.ToListAsync();
-        }
-
-        // GET: api/Especialidades/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Especialidad>> GetEspecialidad(int id)
-        {
-            var especialidad = await _context.Especialidades.FindAsync(id);
+            var especialidad = await _especialidadesService.GetEspecialidades(id);
 
             if (especialidad == null)
             {
                 return NotFound();
             }
 
-            return especialidad;
+            return Ok(especialidad);
         }
 
-        // PUT: api/Especialidades/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<IActionResult> PostEspecialidad(Especialidad especialidad)
+        {
+            var newEspecialidad = await _especialidadesService.PostEspecialidad(especialidad);
+
+            return Ok(newEspecialidad);
+        }
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEspecialidad(int id, Especialidad especialidad)
+        public async Task<IActionResult> PutEspecidalidad(int id, Especialidad especialidad)
         {
             if (id != especialidad.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(especialidad).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EspecialidadExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            var newEspecialidad = await _especialidadesService.PutEspecidalidad(id, especialidad);
 
-            return NoContent();
+            return Ok(newEspecialidad);
         }
-
-        // POST: api/Especialidades
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Especialidad>> PostEspecialidad(Especialidad especialidad)
-        {
-            _context.Especialidades.Add(especialidad);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetEspecialidad", new { id = especialidad.Id }, especialidad);
-        }
-
-        // DELETE: api/Especialidades/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEspecialidad(int id)
         {
-            var especialidade = await _context.Especialidades.FindAsync(id);
-            if (especialidade == null)
+            var especialidad = await _especialidadesService.DeleteEspecialidad(id);
+            if (especialidad == null)
             {
                 return NotFound();
             }
 
-            _context.Especialidades.Remove(especialidade);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok("Especialidad deleted succesfully");
         }
 
-        private bool EspecialidadExists(int id)
-        {
-            return _context.Especialidades.Any(e => e.Id == id);
-        }
     }
 }
