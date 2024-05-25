@@ -15,54 +15,54 @@ namespace Proyecto_Progra_II.Services.Usuarios
         }
     
 
-        public Task<Usuario> DeleteUsuario(int id)
+        async public Task<Usuario> DeleteUsuario(int id)
         {
-            var cita = await _context.Citas.FindAsync(id);
-            if (cita == null)
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
             {
                 return null;
             }
 
-            _context.Citas.Remove(cita);
+            _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
 
-            return cita;
+            return usuario;
         }
 
  
 
-        public Task<List<Usuario>> GetUsuarios()
+        async public Task<List<Usuario>> GetUsuarios()
         {
-            var ListCitas = new List<Cita>();
-            ListCitas = await _context.Citas.ToListAsync();
+            var ListUsuarios = new List<Usuario>();
+            ListUsuarios = await _context.Usuarios.ToListAsync();
 
 
-            return ListCitas;
+            return ListUsuarios;
         }
 
-        public Task<Usuario> GetUsuarios(int id)
+        async public Task<Usuario> GetUsuarios(int id)
         {
-            var cita = await _context.Citas.FindAsync(id);
+            var usuario = await _context.Usuarios.FindAsync(id);
 
 
-            return cita;
+            return usuario;
         }
 
-        public Task<Usuario> PostUsuario(Cita cita)
+         async public Task<Usuario> PostUsuario(Usuario usuario)
         {
-            _context.Citas.Add(cita);
+            _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 
-            return cita;
+            return usuario;
         }
 
-        public Task<Usuario> PutUsuario(int id, Cita cita)
+        async public Task<Usuario> PutUsuario(int id, Usuario usuario)
         {
-            _context.Entry(cita).State = EntityState.Modified;
+            _context.Entry(usuario).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
 
-            return cita;
+            return usuario;
         }
     }
 }

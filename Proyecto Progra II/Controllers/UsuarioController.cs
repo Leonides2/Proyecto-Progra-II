@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Proyecto_Progra_II.Models;
 using Proyecto_Progra_II.Models.Custom;
 using Proyecto_Progra_II.Services.Login;
+using Proyecto_Progra_II.Services.Usuarios;
 
 namespace Proyecto_Progra_II.Controllers
 {
@@ -11,41 +12,76 @@ namespace Proyecto_Progra_II.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        private readonly ILoginService _loginService;
-        private readonly ApiContext _context;
-        public UsuarioController(ILoginService loginService)
+        private readonly IUsuariosService _usuariosService;
+
+        public UsuarioController(IUsuariosService usuariosService)
         {
-            _loginService = loginService;
+            _usuariosService = usuariosService;
         }
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuario()
+        public async Task<IActionResult> GetUsuarios()
         {
-            return await _context.Usuarios.ToListAsync();
-        }
+            var usuarios_request = await _usuariosService.GetUsuarios();
 
-        [HttpPost]
-        [Route("login")]
-        public async Task<IActionResult> Login([FromBody] UsuarioRequest request)
-        {
-            var user_request = await _loginService.ReturnToken(request);
-
-            if (user_request == null)
+            if (usuarios_request == null)
             {
-                return Unauthorized();
+                return NoContent();
             }
 
-            return Ok(user_request);
+            return Ok(usuarios_request);
+        }
+
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUsuarios(int id)
+        {
+            var usuario = await _usuariosService.GetUsuarios(id);
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(usuario);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
+        {
+            if (id != usuario.Id)
+            {
+                return BadRequest();
+            }
+
+
+            var newUsuario = await _usuariosService.PutUsuario(id, usuario);
+
+            return Ok(newUsuario);
+
+
         }
 
         [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        public async Task<IActionResult> PostUsuario(Usuario usuario)
         {
-            _context.Usuarios.Add(usuario);
-            await _context.SaveChangesAsync();
+            var newUsuario = await _usuariosService.PostUsuario(usuario);
 
-            return CreatedAtAction("GetUsuario", new { id = usuario.Id }, usuario);
+            return Ok(newUsuario);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUsuario(int id)
+        {
+            var cita = await _usuariosService.DeleteUsuario(id);
+            if (cita == null)
+            {
+                return NotFound();
+            }
+
+            return Ok("Usuario deleted succesfully");
+        }
+
     }
 }
