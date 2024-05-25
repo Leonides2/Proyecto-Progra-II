@@ -1,7 +1,6 @@
-﻿
-using Proyecto_Progra_II.Models;
+﻿using Proyecto_Progra_II.Models;
 using Proyecto_Progra_II.Models.Custom;
-namespace Proyecto_Progra_II.Services
+namespace Proyecto_Progra_II.Services.Login
 {
     public interface ILoginService
     {

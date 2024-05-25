@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Proyecto_Progra_II.Services
+namespace Proyecto_Progra_II.Services.Login
 {
 
     public class LoginService : ILoginService
@@ -19,10 +19,11 @@ namespace Proyecto_Progra_II.Services
             _configuration = configuration;
         }
 
+
         private string generateToken(string id)
         {
             var key = _configuration.GetValue<string>("JwtSettings:key");
-            var keyBytes =  Encoding.UTF8.GetBytes(key);
+            var keyBytes = Encoding.UTF8.GetBytes(key);
 
             var claims = new ClaimsIdentity();
             claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, id));
@@ -50,10 +51,10 @@ namespace Proyecto_Progra_II.Services
         public async Task<UsuarioResponse> ReturnToken(UsuarioRequest request)
         {
             var User = _apiContext.Usuarios.FirstOrDefault(
-                u =>  u.Email == request.Email && u.Password == request.Password
+                u => u.Email == request.Email && u.Password == request.Password
                 );
 
-            if ( User == null )
+            if (User == null)
             {
                 return await Task.FromResult<UsuarioResponse>(null);
             }
@@ -61,7 +62,7 @@ namespace Proyecto_Progra_II.Services
 
             string tokenMake = generateToken(User.Id.ToString());
 
-            return new UsuarioResponse() { Token = tokenMake, Msg = "Ok", Status = ""};
+            return new UsuarioResponse() { Token = tokenMake, Msg = "Ok", Status = "" };
         }
     }
 }

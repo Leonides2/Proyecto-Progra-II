@@ -7,17 +7,14 @@ public partial class Usuario
 {
     public int Id { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string Name { get; set; }
 
-    public string Password { get; set; } = null!;
+    public string Password { get; set; }
 
-    public string Email { get; set; } = null!;
+    public string Email { get; set; }
 
-    public string Telefono { get; set; } = null!;
+    public string Telefono { get; set; }
 
     public int IdRol { get; set; }
 
-    public virtual ICollection<Cita> Cita { get; set; } = new List<Cita>();
-
-    public virtual Role IdRolNavigation { get; set; } = null!;
 }

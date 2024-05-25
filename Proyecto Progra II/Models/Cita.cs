@@ -9,7 +9,7 @@ public partial class Cita
 
     public DateTime Fecha { get; set; }
 
-    public string Lugar { get; set; } = null!;
+    public string Lugar { get; set; }
 
     public int IdEstado { get; set; }
 
@@ -17,9 +17,6 @@ public partial class Cita
 
     public int IdEspecialidad { get; set; }
 
-    public virtual Especialidade IdEspecialidadNavigation { get; set; } = null!;
+    public int IdSucursal { get; set; }
 
-    public virtual EstadosCita IdEstadoNavigation { get; set; } = null!;
-
-    public virtual Usuario IdPacienteNavigation { get; set; } = null!;
 }

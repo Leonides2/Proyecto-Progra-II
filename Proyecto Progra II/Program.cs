@@ -2,9 +2,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Proyecto_Progra_II.Models;
-using Proyecto_Progra_II.Services;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Proyecto_Progra_II.Services.Login;
+using Proyecto_Progra_II.Services.Citas;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,12 +16,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 builder.Services.AddDbContext<ApiContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration["ConnectionString"]);
     
 });
+
+//Services
+
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<ICitasService, CitasService>();
+
+
+
 
 var key = builder.Configuration.GetValue<string>("JwtSettings:key");
 var keyBytes = Encoding.UTF8.GetBytes(key);
