@@ -26,7 +26,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApiContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration["ConnectionString"]);
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("sql"));
     
 });
 
