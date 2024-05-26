@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Proyecto_Progra_II.Models;
@@ -19,7 +20,7 @@ namespace Proyecto_Progra_II.Controllers
             _usuariosService = usuariosService;
         }
 
-
+        [Authorize("ADMIN")]
         [HttpGet]
         public async Task<IActionResult> GetUsuarios()
         {
@@ -33,7 +34,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(usuarios_request);
         }
 
-
+        [Authorize("USER")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUsuarios(int id)
         {

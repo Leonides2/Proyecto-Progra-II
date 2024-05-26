@@ -12,7 +12,7 @@ namespace Proyecto_Progra_II.Controllers
     {
 
         private readonly ILoginService _loginService;
-        private readonly ApiContext _context;
+
         public LoginController(ILoginService loginService)
         {
             _loginService = loginService;
