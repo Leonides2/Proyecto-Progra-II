@@ -7,5 +7,5 @@ public partial class EstadosCita
 {
     public int Id { get; set; }
 
-    public string NombreEstado { get; set; }
+    public string NombreEstado { get; set; } = string.Empty;
 }

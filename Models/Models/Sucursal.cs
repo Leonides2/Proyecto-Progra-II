@@ -7,8 +7,8 @@ public partial class Sucursal
 {
     public int Id { get; set; }
 
-    public string NombreSucursal { get; set; }
+    public string NombreSucursal { get; set; } = string.Empty;
 
-    public string Direccion { get; set; }
+    public string Direccion { get; set; } = string.Empty;
 
 }
