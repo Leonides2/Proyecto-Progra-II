@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Proyecto_Progra_II.Models;
 using Proyecto_Progra_II.Services.Sucursales;
 
@@ -17,7 +18,7 @@ namespace Proyecto_Progra_II.Controllers
             _service = service;
         }
 
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetSucursales()
         {
@@ -31,7 +32,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(sucursales_request);
         }
 
-
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSucursales(int id)
         {
@@ -45,7 +46,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(sucursal);
         }
 
-
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRol(int id, Sucursal sucursal)
         {
@@ -60,6 +61,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(newSucursal);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public async Task<IActionResult> PostSucursal(Sucursal sucursal)
         {
@@ -68,6 +70,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(newSucursal);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSucursal(int id)
         {

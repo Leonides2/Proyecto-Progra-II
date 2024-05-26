@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Proyecto_Progra_II.Models;
 using Proyecto_Progra_II.Services.Roles;
 
@@ -18,6 +19,7 @@ namespace Proyecto_Progra_II.Controllers
             _rolesService = rolesService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetRoles()
         {
@@ -32,6 +34,7 @@ namespace Proyecto_Progra_II.Controllers
         }
 
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRoles(int id)
         {
@@ -46,6 +49,7 @@ namespace Proyecto_Progra_II.Controllers
         }
 
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRol(int id, Rol rol)
         {
@@ -60,6 +64,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(newRol);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public async Task<IActionResult> PostRol(Rol rol)
         {
@@ -68,6 +73,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(newRol);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRol(int id)
         {

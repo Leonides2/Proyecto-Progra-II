@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Proyecto_Progra_II.Models;
 using Proyecto_Progra_II.Services.Citas;
 
@@ -17,6 +18,8 @@ namespace Proyecto_Progra_II.Controllers
             _citasService = citasService;
         }
 
+
+        [Authorize(Policy = "AdminPolicy")]
         [HttpGet]
         public async Task<IActionResult> GetCitas()
         {
@@ -30,6 +33,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(citas_request);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCita(int id)
         {
@@ -43,6 +47,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(cita);
         }
 
+        [Authorize(Policy = "UserPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCita(int id, Cita cita)
         {
@@ -59,6 +64,7 @@ namespace Proyecto_Progra_II.Controllers
 
         }
 
+        [Authorize(Policy = "UserPolicy")]
         [HttpPost]
         public async Task<IActionResult> PostCita(Cita cita)
         {   
@@ -67,6 +73,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(newCita);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCita(int id)
         {

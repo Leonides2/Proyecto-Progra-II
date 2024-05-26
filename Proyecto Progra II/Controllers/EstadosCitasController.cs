@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Proyecto_Progra_II.Models;
 using Proyecto_Progra_II.Services.EstadosCitas;
@@ -17,6 +18,7 @@ namespace Proyecto_Progra_II.Controllers
         }
 
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetEstadosCitas()
         {
@@ -30,7 +32,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(estadosCitas_request);
         }
 
-
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEstadosCitas(int id)
         {
@@ -44,7 +46,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(estadoCita);
         }
 
-
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEstadoCita(int id, EstadosCita estadosCita)
         {
@@ -59,6 +61,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(newEstadoCita);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public async Task<IActionResult> PostEstadoCita(EstadosCita estadosCita)
         {
@@ -67,6 +70,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(newEstadoCita);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEstadoCita(int id)
         {

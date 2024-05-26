@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Proyecto_Progra_II.Models;
 using Proyecto_Progra_II.Services.Especialidades;
 
@@ -15,6 +16,7 @@ namespace Proyecto_Progra_II.Controllers
             _especialidadesService = especialidad;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetEspecialidades()
         {
@@ -27,6 +29,8 @@ namespace Proyecto_Progra_II.Controllers
 
             return Ok(especialidades_request);
         }
+
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEspecialidades(int id)
         {
@@ -40,6 +44,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(especialidad);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public async Task<IActionResult> PostEspecialidad(Especialidad especialidad)
         {
@@ -48,6 +53,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(newEspecialidad);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEspecidalidad(int id, Especialidad especialidad)
         {
@@ -61,6 +67,8 @@ namespace Proyecto_Progra_II.Controllers
 
             return Ok(newEspecialidad);
         }
+
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEspecialidad(int id)
         {

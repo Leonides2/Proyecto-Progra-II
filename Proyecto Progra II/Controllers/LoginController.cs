@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Proyecto_Progra_II.Models;
 using Proyecto_Progra_II.Models.Custom;
@@ -19,10 +20,15 @@ namespace Proyecto_Progra_II.Controllers
             _loginService = loginService;
             _configuration = configuration;
         }
-
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] UsuarioRequest request)
         {
+            if (request == null)
+            {
+                return NoContent();
+            }
+
             var user_request = await _loginService.ReturnToken(request, _configuration.GetValue<string>("JwtSettings:key"));
 
             if (user_request == null)

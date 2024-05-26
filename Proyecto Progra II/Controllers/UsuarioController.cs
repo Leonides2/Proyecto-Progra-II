@@ -32,7 +32,9 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(usuarios_request);
         }
 
+
         [Authorize(Policy = "UserPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUsuarios(int id)
         {
@@ -46,6 +48,8 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(usuario);
         }
 
+        [Authorize(Policy = "UserPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
         {
@@ -62,6 +66,7 @@ namespace Proyecto_Progra_II.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> PostUsuario(Usuario usuario)
         {
@@ -70,6 +75,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(newUsuario);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsuario(int id)
         {
