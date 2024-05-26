@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using Proyecto_Progra_II.Models;
-using Proyecto_Progra_II.Models.Custom;
 using Proyecto_Progra_II.Services.Citas;
 
 namespace Proyecto_Progra_II.Controllers

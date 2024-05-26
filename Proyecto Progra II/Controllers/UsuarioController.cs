@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
 using Proyecto_Progra_II.Models;
-using Proyecto_Progra_II.Models.Custom;
-using Proyecto_Progra_II.Services.Login;
+
 using Proyecto_Progra_II.Services.Usuarios;
 
 namespace Proyecto_Progra_II.Controllers
@@ -20,7 +18,7 @@ namespace Proyecto_Progra_II.Controllers
             _usuariosService = usuariosService;
         }
 
-        [Authorize("ADMIN")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpGet]
         public async Task<IActionResult> GetUsuarios()
         {
@@ -34,7 +32,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(usuarios_request);
         }
 
-        [Authorize("USER")]
+        [Authorize(Policy = "UserPolicy")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUsuarios(int id)
         {

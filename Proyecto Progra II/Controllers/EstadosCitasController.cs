@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Proyecto_Progra_II.Models;
+using Proyecto_Progra_II.Services.EstadosCitas;
 
 namespace Proyecto_Progra_II.Controllers
 {
@@ -13,95 +9,76 @@ namespace Proyecto_Progra_II.Controllers
     [ApiController]
     public class EstadosCitasController : ControllerBase
     {
-        private readonly ApiContext _context;
+        private readonly IEstadoCitaService _estadoCitaService;
 
-        public EstadosCitasController(ApiContext context)
+        public EstadosCitasController(IEstadoCitaService estadoCitaService)
         {
-            _context = context;
+            _estadoCitaService = estadoCitaService;
         }
 
-        // GET: api/EstadosCitas
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EstadosCita>>> GetEstadosCitas()
+        public async Task<IActionResult> GetEstadosCitas()
         {
-            return await _context.EstadosCitas.ToListAsync();
+            var estadosCitas_request = await _estadoCitaService.GetEstadosCitas();
+
+            if (estadosCitas_request == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(estadosCitas_request);
         }
 
-        // GET: api/EstadosCitas/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<EstadosCita>> GetEstadosCita(int id)
-        {
-            var estadosCita = await _context.EstadosCitas.FindAsync(id);
 
-            if (estadosCita == null)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetEstadosCitas(int id)
+        {
+            var estadoCita = await _estadoCitaService.GetEstadosCitas(id);
+
+            if (estadoCita == null)
             {
                 return NotFound();
             }
 
-            return estadosCita;
+            return Ok(estadoCita);
         }
 
-        // PUT: api/EstadosCitas/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEstadosCita(int id, EstadosCita estadosCita)
+        public async Task<IActionResult> PutEstadoCita(int id, EstadosCita estadosCita)
         {
             if (id != estadosCita.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(estadosCita).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EstadosCitaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            var newEstadoCita = await _estadoCitaService.PutEstadoCita(id, estadosCita);
 
-            return NoContent();
+            return Ok(newEstadoCita);
         }
 
-        // POST: api/EstadosCitas
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<EstadosCita>> PostEstadosCita(EstadosCita estadosCita)
+        public async Task<IActionResult> PostEstadoCita(EstadosCita estadosCita)
         {
-            _context.EstadosCitas.Add(estadosCita);
-            await _context.SaveChangesAsync();
+            var newEstadoCita = await _estadoCitaService.PostEstadoCita(estadosCita);
 
-            return CreatedAtAction("GetEstadosCita", new { id = estadosCita.Id }, estadosCita);
+            return Ok(newEstadoCita);
         }
 
-        // DELETE: api/EstadosCitas/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEstadosCita(int id)
+        public async Task<IActionResult> DeleteEstadoCita(int id)
         {
-            var estadosCita = await _context.EstadosCitas.FindAsync(id);
-            if (estadosCita == null)
+            var estadoCita = await _estadoCitaService.DeleteEstadoCita(id);
+            if (estadoCita == null)
             {
                 return NotFound();
             }
 
-            _context.EstadosCitas.Remove(estadosCita);
-            await _context.SaveChangesAsync();
+            return Ok("Estadocita deleted succesfully");
 
-            return NoContent();
         }
 
-        private bool EstadosCitaExists(int id)
-        {
-            return _context.EstadosCitas.Any(e => e.Id == id);
-        }
     }
 }

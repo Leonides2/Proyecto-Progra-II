@@ -7,6 +7,12 @@ using Proyecto_Progra_II.Services.Login;
 using Proyecto_Progra_II.Services.Citas;
 using Proyecto_Progra_II.Services.Usuarios;
 using Proyecto_Progra_II.Services.Especialidades;
+using Proyecto_Progra_II.Services.EstadosCitas;
+using Services.Services.EstadosCitas;
+using Proyecto_Progra_II.Services.Roles;
+using Services.Services.Roles;
+using Proyecto_Progra_II.Services.Sucursales;
+using Services.Services.Sucursales;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,10 +36,11 @@ builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ICitasService, CitasService>();
 builder.Services.AddScoped<IUsuariosService, UsuariosService>();
 builder.Services.AddScoped<IEspecialidadService,EspecialidadService>();
+builder.Services.AddScoped<IEstadoCitaService, EstadoCitaService>();
+builder.Services.AddScoped<IRolesService, RolesService>();
+builder.Services.AddScoped<IEstadoCitaService, EstadoCitaService>();
+builder.Services.AddScoped<ISucursalService, SucursalService>();
 
-
-var key = builder.Configuration.GetValue<string>("JwtSettings:key");
-var keyBytes = Encoding.UTF8.GetBytes(key);
 
 builder.Services.AddAuthentication("Bearer").AddJwtBearer(config =>
 {
@@ -42,12 +49,19 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer(config =>
     config.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:key"])),
         ValidateIssuer = false,
         ValidateAudience = false,
         ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero
     };
+});
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
 });
 
 var app = builder.Build();

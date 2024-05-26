@@ -12,16 +12,18 @@ namespace Proyecto_Progra_II.Controllers
     {
 
         private readonly ILoginService _loginService;
+        private readonly IConfiguration _configuration;
 
-        public LoginController(ILoginService loginService)
+        public LoginController(ILoginService loginService, IConfiguration configuration)
         {
             _loginService = loginService;
+            _configuration = configuration;
         }
 
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] UsuarioRequest request)
         {
-            var user_request = await _loginService.ReturnToken(request);
+            var user_request = await _loginService.ReturnToken(request, _configuration.GetValue<string>("JwtSettings:key"));
 
             if (user_request == null)
             {

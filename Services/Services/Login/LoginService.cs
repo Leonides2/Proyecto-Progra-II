@@ -12,35 +12,37 @@ namespace Proyecto_Progra_II.Services.Login
     public class LoginService : ILoginService
     {
         private readonly ApiContext _apiContext;
-        private readonly IConfiguration _configuration;
 
-        public LoginService(ApiContext apiContext, IConfiguration configuration)
+        public LoginService(ApiContext apiContext)
         {
             _apiContext = apiContext;
-            _configuration = configuration;
+
         }
 
 
-        private string generateToken(string rol)
+        private string generateToken(string username, string role, string secret)
         {
-            
-            var key =  "Supercalifragisdisticoespiralidoso_Otorr1n0Lagqn9olo90";
-            var keyBytes = Encoding.UTF8.GetBytes(key);
+            var keyBytes = Encoding.UTF8.GetBytes(secret);
 
-            var claims = new ClaimsIdentity();
-            claims.AddClaim(new Claim(ClaimTypes.Role, rol));
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, role)
+            };
 
             var credentialsToken = new SigningCredentials(
                 new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature
-                );
+            );
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = claims,
-                Expires = DateTime.UtcNow.AddMinutes(1),
-                SigningCredentials = credentialsToken
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddMinutes(30), // Token expiration time
+                SigningCredentials = credentialsToken,
+                Issuer = "yourIssuer",
+                Audience = "yourAudience"
             };
-
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenConfig = tokenHandler.CreateToken(tokenDescriptor);
@@ -50,21 +52,27 @@ namespace Proyecto_Progra_II.Services.Login
             return tokenMake;
         }
 
-        public async Task<UsuarioResponse> ReturnToken(UsuarioRequest request)
+        public async Task<UsuarioResponse> ReturnToken(UsuarioRequest request, string secret)
         {
-            var User = _apiContext.Usuarios.FirstOrDefault(
+            var user = _apiContext.Usuarios.FirstOrDefault(
                 u => u.Email == request.Email && u.Password == request.Password
-                );
+            );
 
-            if (User == null)
+            if (user == null)
             {
                 return await Task.FromResult<UsuarioResponse>(null);
             }
-            var rol = _apiContext.Roles.FirstOrDefault(item => item.Id == User.IdRol);
 
-            string tokenMake = generateToken(rol.ToString());
+            var role = _apiContext.Roles.FirstOrDefault(item => item.Id == user.IdRol);
 
-            return new UsuarioResponse() { Token = tokenMake, Msg = "Ok", Status = "" };
+            if (role == null)
+            {
+                return await Task.FromResult<UsuarioResponse>(null);
+            }
+
+            string tokenMake = generateToken(user.Email, role.NombreRol, secret);
+
+            return new UsuarioResponse() { Token = tokenMake, Msg = "Ok", Status = "Success" };
         }
     }
 }

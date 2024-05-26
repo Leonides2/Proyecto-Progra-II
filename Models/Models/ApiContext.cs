@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Proyecto_Progra_II.Models;
@@ -11,7 +12,7 @@ public partial class ApiContext : DbContext
     }
 
     public ApiContext(DbContextOptions<ApiContext> options)
-        : base(options)
+     : base(options)
     {
     }
 
