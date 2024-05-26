@@ -7,6 +7,7 @@ namespace Proyecto_Progra_II.Services.Citas
 
         Task<List<Cita>> GetCitas();
         Task<Cita> GetCitas(int id);
+        Task<List<Cita>> GetCitasUsuarios(int idUsuario);
 
         Task<Cita> PostCita(Cita cita);
 

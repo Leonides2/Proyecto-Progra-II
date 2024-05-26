@@ -45,6 +45,14 @@ namespace Proyecto_Progra_II.Services.Citas
             return cita;
         }
 
+        async public Task<List<Cita>> GetCitasUsuarios(int idUsuario)
+        {
+            var listCitas = _context.Citas.Where<Cita>(item => item.IdPaciente == idUsuario).ToList();
+            return listCitas;
+        }
+
+
+
         async public Task<Cita> PostCita(Cita cita)
         {
             _context.Citas.Add(cita);

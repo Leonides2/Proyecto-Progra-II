@@ -47,6 +47,20 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(cita);
         }
 
+        [HttpGet]
+        [Route("/UsuarioCitas")]
+        public async Task<IActionResult> GetCitas(int idUsuario)
+        {
+            var cita = await _citasService.GetCitasUsuarios(idUsuario);
+
+            if (cita == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(cita);
+        }
+
         [Authorize(Policy = "UserPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCita(int id, Cita cita)
