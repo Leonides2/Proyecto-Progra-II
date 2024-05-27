@@ -33,8 +33,7 @@ namespace Proyecto_Progra_II.Controllers
         }
 
 
-        [Authorize(Policy = "UserPolicy")]
-        [Authorize(Policy = "AdminPolicy")]
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUsuarios(int id)
         {
@@ -49,7 +48,6 @@ namespace Proyecto_Progra_II.Controllers
         }
 
         [Authorize(Policy = "UserPolicy")]
-        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
         {
