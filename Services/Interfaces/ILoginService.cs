@@ -1,5 +1,5 @@
 ﻿using Proyecto_Progra_II.Models.Custom;
-namespace Proyecto_Progra_II.Services.Login
+namespace Services.Interfaces
 {
     public interface ILoginService
     {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 
 namespace Proyecto_Progra_II.Models;
 
@@ -7,13 +6,13 @@ public partial class Usuario
 {
     public int Id { get; set; }
 
-    public string Name { get; set; } = string.Empty;
+    public string? Name { get; set; } 
 
-    public string Password { get; set; } = string.Empty;
+    public string? Password { get; set; } 
 
-    public string Email { get; set; } = string.Empty;
+    public string? Email { get; set; } 
 
-    public string Telefono { get; set; } = string.Empty;
+    public string? Telefono { get; set; } 
 
     public int IdRol { get; set; }
 

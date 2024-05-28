@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Models.Models.Custom;
 using Proyecto_Progra_II.Models;
-
-using Proyecto_Progra_II.Services.Usuarios;
+using Services.Interfaces;
 
 namespace Proyecto_Progra_II.Controllers
 {
@@ -12,10 +11,14 @@ namespace Proyecto_Progra_II.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuariosService _usuariosService;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _config;
 
-        public UsuarioController(IUsuariosService usuariosService)
+        public UsuarioController(IUsuariosService usuariosService, IEmailService emailService, IConfiguration config)
         {
             _usuariosService = usuariosService;
+            _emailService = emailService;
+            _config = config;
         }
 
         [Authorize(Policy = "AdminPolicy")]
@@ -68,7 +71,19 @@ namespace Proyecto_Progra_II.Controllers
         [HttpPost]
         public async Task<IActionResult> PostUsuario(Usuario usuario)
         {
+            SmtpSettings settings = new SmtpSettings();
+            settings.Port = _config.GetValue<int>("SmtpSettings:Port");
+            settings.Server = _config.GetValue<string>("SmtpSettings:Server");
+            settings.Username = _config.GetValue<string>("SmtpSettings:Username");
+            settings.Password = _config.GetValue<string>("SmtpSettings:Password");
+
             var newUsuario = await _usuariosService.PostUsuario(usuario);
+
+            string subject = "Bienvenido a nuestra clinica";
+            string message = $"Hola {usuario.Name}, bienvenido a nuestra aplicación.";
+
+            await _emailService.SendEmailAsync(usuario.Email, subject, message, settings );
+
 
             return Ok(newUsuario);
         }

@@ -1,6 +1,6 @@
 ﻿using Proyecto_Progra_II.Models;
 
-namespace Proyecto_Progra_II.Services.Sucursales
+namespace Services.Interfaces
 {
     public interface ISucursalService
     {

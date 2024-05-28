@@ -1,6 +1,6 @@
 ﻿using Proyecto_Progra_II.Models;
 
-namespace Proyecto_Progra_II.Services.Roles
+namespace Services.Interfaces
 {
     public interface IRolesService
     {

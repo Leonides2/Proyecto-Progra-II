@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Proyecto_Progra_II.Models;
-using Proyecto_Progra_II.Services.Roles;
+using Services.Interfaces;
 
 
 namespace Services.Services.Roles

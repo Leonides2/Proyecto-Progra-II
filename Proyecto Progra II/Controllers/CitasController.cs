@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Proyecto_Progra_II.Models;
-using Proyecto_Progra_II.Services.Citas;
+using Services.Interfaces;
 
 namespace Proyecto_Progra_II.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class CitasController : ControllerBase

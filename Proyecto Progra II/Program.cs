@@ -7,12 +7,13 @@ using Proyecto_Progra_II.Services.Login;
 using Proyecto_Progra_II.Services.Citas;
 using Proyecto_Progra_II.Services.Usuarios;
 using Proyecto_Progra_II.Services.Especialidades;
-using Proyecto_Progra_II.Services.EstadosCitas;
 using Services.Services.EstadosCitas;
-using Proyecto_Progra_II.Services.Roles;
 using Services.Services.Roles;
-using Proyecto_Progra_II.Services.Sucursales;
 using Services.Services.Sucursales;
+using Models.Models.Custom;
+using Services.Services.Email;
+using System.Configuration;
+using Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,11 @@ builder.Services.AddDbContext<ApiContext>(opt =>
 });
 
 //Services
+builder.Services.AddTransient<IEmailService, EmailService>();
+
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmptSettings"));
+
+
 
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ICitasService, CitasService>();
@@ -58,11 +64,10 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer(config =>
 });
 
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
-});
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"))
+    .AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
+
 
 var app = builder.Build();
 
