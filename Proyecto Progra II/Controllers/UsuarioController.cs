@@ -22,7 +22,7 @@ namespace Proyecto_Progra_II.Controllers
         }
 
 
-        [Authorize(Policy = "AdminPolicy")]
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpGet]
         public async Task<IActionResult> GetUsuarios()
         {
@@ -51,7 +51,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(usuario);
         }
 
-        [Authorize(Policy = "UserPolicy")]
+        //[Authorize(Policy = "UserPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
         {

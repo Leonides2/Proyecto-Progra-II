@@ -13,5 +13,7 @@ namespace Services.Interfaces
 
         Task<Cita> PutCita(int id, Cita cita);
         Task<Cita> DeleteCita(int id);
-    }
+
+        public bool HasCitaTheSameDay(Cita cita);
+    }  
 }

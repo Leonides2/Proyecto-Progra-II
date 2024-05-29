@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using Proyecto_Progra_II.Models;
 using System.Text;
@@ -17,33 +16,26 @@ using Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 builder.Services.AddDbContext<ApiContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("sql"));
-    
 });
 
-//Services
+// Services
 builder.Services.AddTransient<IEmailService, EmailService>();
-
-builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmptSettings"));
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
 
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ICitasService, CitasService>();
 builder.Services.AddScoped<IUsuariosService, UsuariosService>();
-builder.Services.AddScoped<IEspecialidadService,EspecialidadService>();
+builder.Services.AddScoped<IEspecialidadService, EspecialidadService>();
 builder.Services.AddScoped<IEstadoCitaService, EstadoCitaService>();
 builder.Services.AddScoped<IRolesService, RolesService>();
-builder.Services.AddScoped<IEstadoCitaService, EstadoCitaService>();
 builder.Services.AddScoped<ISucursalService, SucursalService>();
-
 
 builder.Services.AddAuthentication("Bearer").AddJwtBearer(config =>
 {
@@ -60,16 +52,13 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer(config =>
     };
 });
 
-
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
     options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
 });
 
-
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -81,9 +70,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();

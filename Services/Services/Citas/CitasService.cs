@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Proyecto_Progra_II.Models;
 using Services.Interfaces;
+using System.Data;
 
 namespace Proyecto_Progra_II.Services.Citas
 {
@@ -66,15 +67,24 @@ namespace Proyecto_Progra_II.Services.Citas
 
         async public Task<Cita> PutCita(int id, Cita cita)
         {
-            
-
             _context.Entry(cita).State = EntityState.Modified;
             await _context.SaveChangesAsync();
       
 
-            return cita;
+            return cita; 
+        }
 
-           
+        public bool HasCitaTheSameDay(Cita cita) {
+
+            Cita userDb = _context.Citas.FirstOrDefault(item => item.Fecha.ToShortDateString().Equals(cita.Fecha.ToShortDateString()))!;
+
+            if (userDb != null)
+            {
+                return true;
+            }
+
+
+            return false;
         }
 
     }

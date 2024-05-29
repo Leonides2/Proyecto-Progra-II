@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using Proyecto_Progra_II.Models;
 using Proyecto_Progra_II.Models.Custom;
 using Services.Interfaces;
@@ -22,34 +21,24 @@ namespace Proyecto_Progra_II.Services.Login
 
         private string generateToken(string username, string role, string secret)
         {
-            var keyBytes = Encoding.UTF8.GetBytes(secret);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(ClaimTypes.Name, username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Role, role)
+                new Claim(ClaimTypes.Role, role) // Incluir el rol en los claims
             };
 
-            var credentialsToken = new SigningCredentials(
-                new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature
-            );
+            var token = new JwtSecurityToken(
+                issuer: null,
+                audience: null,
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: creds);
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(30), // Token expiration time
-                SigningCredentials = credentialsToken,
-                Issuer = "yourIssuer",
-                Audience = "yourAudience"
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenConfig = tokenHandler.CreateToken(tokenDescriptor);
-
-            string tokenMake = tokenHandler.WriteToken(tokenConfig);
-
-            return tokenMake;
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         public async Task<UsuarioResponse> ReturnToken(UsuarioRequest request, string secret)
