@@ -76,9 +76,12 @@ namespace Proyecto_Progra_II.Services.Citas
 
         public bool HasCitaTheSameDay(Cita cita) {
 
-            Cita userDb = _context.Citas.FirstOrDefault(item => item.Fecha.ToShortDateString().Equals(cita.Fecha.ToShortDateString()))!;
 
-            if (userDb != null)
+            var userDb = _context.Usuarios.FirstOrDefault(item => item.Id == cita.IdPaciente)!;
+            var ListCita = _context.Citas.Where(item => item.IdPaciente == userDb.Id).ToList();
+            var hasCita = ListCita.Find(item => item.Fecha.DayOfYear == cita.Fecha.DayOfYear);
+
+            if (hasCita != null)
             {
                 return true;
             }
