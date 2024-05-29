@@ -37,7 +37,6 @@ namespace Proyecto_Progra_II.Services.Usuarios
             var ListUsuarios = new List<Usuario>();
             ListUsuarios = await _context.Usuarios.ToListAsync();
 
-
             return ListUsuarios;
         }
 

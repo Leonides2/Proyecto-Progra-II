@@ -15,17 +15,37 @@ namespace Services.Services.Email
             
         }
 
-        public async Task SendEmailAsync(string Email, string subject, string msg, SmtpSettings settings)
+        public async Task SendEmailAsync(string Email, string subject, string msg, SmtpSettings settings, string table)
         {
-            string body = "<!DOCTYPE html>\r\n<html>\r\n" +
-                "<head>\r\n  " +
-                "<link rel='stylesheet' type='text/css' media='screen' href='main.css'>\r\n" +
+            string body = "<!DOCTYPE html>\r\n" +
+                "<html>\r\n" +
+                "<head>\r\n\r\n   " +
+                " <style>\r\n        " +
+                "table {\r\n         " +
+                " font-family: arial, sans-serif;\r\n         " +
+                " border-collapse: collapse;\r\n          " +
+                "width: 100%;\r\n        }\r\n        \r\n        " +
+                "td, th {\r\n         " +
+                " border: 1px solid #dddddd;\r\n         " +
+                " text-align: left;\r\n          " +
+                "padding: 8px;\r\n        }\r\n        \r\n        " +
+                "tr:nth-child(even) {\r\n         " +
+                " background-color: #dddddd;\r\n        }\r\n\r\n        " +
+                "body{\r\n            width: 100%\r\n        }\r\n\r\n       " +
+                " h2{\r\n            " +
+                "font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;\r\n        }\r\n       " +
+                " h3{\r\n            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;\r\n        }\r\n       " +
+                " p{\r\n            word-wrap: break-word; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;\r\n        }\r\n        " +
+                "</style>\r\n" +
                 "</head>\r\n" +
-                "<body style=\"width: 100%;\">\r\n    " +
-                "<h2 style=\"font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;\">"+ subject +" </h2>\r\n    " +
-                "<h3 style=\"font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;\"> "+ msg +"</h3>\r\n\r\n    " +
-                "<p style=\"word-wrap: break-word; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;\"> Por favor no responda a este correo, es un correo generado automaticamente</p>\r\n" +
-                "</body>\r\n</html>";
+                "<body\">\r\n    " +
+                "<h2>"+ subject +" </h2>\r\n   " +
+                "<h3>"+ msg +"</h3>\r\n    " +
+                table
+                +
+                "<p> Por favor no responda a este correo, es un correo generado automaticamente</p>\r\n" +
+                "</body>\r\n" +
+                "</html>";
             try
             {
                 var client = new SmtpClient(settings.Server, settings.Port)

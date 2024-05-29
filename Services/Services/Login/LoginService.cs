@@ -20,7 +20,6 @@ namespace Proyecto_Progra_II.Services.Login
 
         }
 
-
         private string generateToken(string username, string role, string secret)
         {
             var keyBytes = Encoding.UTF8.GetBytes(secret);

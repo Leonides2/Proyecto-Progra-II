@@ -9,6 +9,6 @@ namespace Services.Interfaces
 {
     public interface IEmailService
     {
-        Task SendEmailAsync(string Email, string subject, string msg, SmtpSettings settings);
+        Task SendEmailAsync(string Email, string subject, string msg, SmtpSettings settings, string table);
     }
 }

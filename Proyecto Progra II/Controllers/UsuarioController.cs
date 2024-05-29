@@ -21,6 +21,7 @@ namespace Proyecto_Progra_II.Controllers
             _config = config;
         }
 
+
         [Authorize(Policy = "AdminPolicy")]
         [HttpGet]
         public async Task<IActionResult> GetUsuarios()
@@ -81,8 +82,9 @@ namespace Proyecto_Progra_II.Controllers
 
             string subject = "Bienvenido a nuestra clinica";
             string message = $"Hola {usuario.Name}, bienvenido a nuestra aplicación.";
+            string table = "";
 
-            await _emailService.SendEmailAsync(usuario.Email, subject, message, settings );
+            await _emailService.SendEmailAsync(usuario.Email, subject, message, settings, table);
 
 
             return Ok(newUsuario);

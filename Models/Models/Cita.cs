@@ -9,7 +9,7 @@ public partial class Cita
 
     public DateTime Fecha { get; set; }
 
-    public string Lugar { get; set; } = string.Empty;
+    public string Lugar { get; set; } 
 
     public int IdEstado { get; set; }
 

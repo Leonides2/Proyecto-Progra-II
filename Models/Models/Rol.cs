@@ -8,6 +8,5 @@ public partial class Rol
 {
     public int Id { get; set; }
 
-    public string NombreRol { get; set; } = string.Empty;
-
+    public string NombreRol { get; set; }
 }

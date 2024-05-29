@@ -12,7 +12,6 @@ using Services.Services.Roles;
 using Services.Services.Sucursales;
 using Models.Models.Custom;
 using Services.Services.Email;
-using System.Configuration;
 using Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,8 +34,6 @@ builder.Services.AddDbContext<ApiContext>(opt =>
 builder.Services.AddTransient<IEmailService, EmailService>();
 
 builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmptSettings"));
-
-
 
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ICitasService, CitasService>();
@@ -64,9 +61,11 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer(config =>
 });
 
 
-builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"))
-    .AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
+});
 
 
 var app = builder.Build();

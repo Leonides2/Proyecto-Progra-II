@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Models.Models.Custom;
 using Proyecto_Progra_II.Models;
 using Services.Interfaces;
 
@@ -11,16 +12,22 @@ namespace Proyecto_Progra_II.Controllers
     public class CitasController : ControllerBase
     {
         private readonly ICitasService _citasService;
-        
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
+        private readonly ApiContext _context;
 
-        public CitasController(ICitasService citasService)
+        public CitasController(ICitasService citasService, IEmailService emailService, IConfiguration configuration, ApiContext context)
         {
             _citasService = citasService;
+            _emailService = emailService;
+            _configuration = configuration;
+            _context = context;
         }
 
 
-        [Authorize(Policy = "AdminPolicy")]
+        
         [HttpGet]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetCitas()
         {
             var citas_request = await _citasService.GetCitas();
@@ -33,8 +40,11 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(citas_request);
         }
 
-        [Authorize(Policy = "AdminPolicy")]
+
+        
+        
         [HttpGet("{id}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetCita(int id)
         {
             var cita = await _citasService.GetCitas(id);
@@ -61,8 +71,10 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(cita);
         }
 
-        [Authorize(Policy = "UserPolicy")]
+        
+        
         [HttpPut("{id}")]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> PutCita(int id, Cita cita)
         {
             if (id != cita.Id)
@@ -78,17 +90,66 @@ namespace Proyecto_Progra_II.Controllers
 
         }
 
-        [Authorize(Policy = "UserPolicy")]
+
+
+        
         [HttpPost]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> PostCita(Cita cita)
         {   
-            var newCita = await _citasService.PostCita(cita);
+            var newCita = await _citasService.PostCita(cita); 
+
+            var user = await _context.Usuarios.FindAsync(cita.IdPaciente);
+            var sucursal = await _context.Sucursales.FindAsync(cita.IdSucursal);
+            var especialidad = await _context.Especialidades.FindAsync(cita.IdEspecialidad);
+            var estado = await _context.EstadosCitas.FindAsync(cita.IdEstado);
+            var date = cita.Fecha;
+
+            SmtpSettings settings = new SmtpSettings();
+            settings.Port = _configuration.GetValue<int>("SmtpSettings:Port");
+            settings.Server = _configuration.GetValue<string>("SmtpSettings:Server");
+            settings.Username = _configuration.GetValue<string>("SmtpSettings:Username");
+            settings.Password = _configuration.GetValue<string>("SmtpSettings:Password");
+
+            string subject = "Resumen de su nueva cita";
+            string message = $"Hola {user.Name}, aqui tienes un resumen de tu cita agendada el dia "+ date.ToShortDateString()+" .";
+            string table = "<table>\r\n        " +
+                "<tr>\r\n            " +
+                    "<th> </th>\r\n            " +
+                    "<th>Datos</th>\r\n        " +
+                "</tr>\r\n        " +
+                "<tr>\r\n           " +
+                    "<td> Fecha </td>\r\n           " +
+                    "<td> "+ date.ToShortDateString() +" </td>\r\n        " +
+                "</tr>\r\n    " +
+                "<tr>\r\n           " +
+                    "<td> Hora </td>\r\n           " +
+                    "<td> "+ date.ToShortTimeString() +" </td>\r\n        " +
+                "</tr>\r\n    " +
+                "<tr>\r\n           " +
+                    "<td> Especialidad </td>\r\n           " +
+                    "<td> " + especialidad.Nombre + " </td>\r\n        " +
+                "</tr>\r\n    " +
+                "<tr>\r\n           " +
+                    "<td> Sucursal </td>\r\n           " +
+                    "<td> " + sucursal.NombreSucursal + " </td>\r\n        " +
+                "</tr>\r\n    " +
+                "<tr>\r\n           " +
+                    "<td> Estado </td>\r\n           " +
+                    "<td> " + estado.NombreEstado + " </td>\r\n        " +
+                "</tr>\r\n    " +
+                "</table>\r\n\r\n    ";
+
+
+            await _emailService.SendEmailAsync(user.Email, subject, message, settings, table);
+
 
             return Ok(newCita);
         }
 
-        [Authorize(Policy = "AdminPolicy")]
+        
         [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> DeleteCita(int id)
         {
             var cita = await _citasService.DeleteCita(id);
