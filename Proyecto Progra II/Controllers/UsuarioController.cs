@@ -23,6 +23,7 @@ namespace Proyecto_Progra_II.Controllers
 
 
         //[Authorize(Policy = "AdminPolicy")]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetUsuarios()
         {
@@ -77,6 +78,8 @@ namespace Proyecto_Progra_II.Controllers
             settings.Server = _config.GetValue<string>("SmtpSettings:Server");
             settings.Username = _config.GetValue<string>("SmtpSettings:Username");
             settings.Password = _config.GetValue<string>("SmtpSettings:Password");
+
+            usuario.IdRol = 2;
 
             var newUsuario = await _usuariosService.PostUsuario(usuario);
 
