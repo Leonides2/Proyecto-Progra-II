@@ -42,7 +42,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(usuarios_request);
         }
 
-
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetUsuarios(int id)
         {
             var usuario = await _usuariosService.GetUsuarios(id);
@@ -61,7 +61,7 @@ namespace Proyecto_Progra_II.Controllers
             var handler = new JwtSecurityTokenHandler();
             var  jsonToken = handler.ReadToken(Jtoken);
             var token = jsonToken as JwtSecurityToken;
-            var userEmail = token.Claims.FirstOrDefault(item => item.Type == "Name").Value;
+            var userEmail = token.Claims.FirstOrDefault(item => item.Type == ClaimTypes.Name).Value;
 
             int userId = _context.Usuarios.FirstOrDefault(item => item.Email == userEmail).Id;
 
