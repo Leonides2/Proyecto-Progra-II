@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models.Models.Custom;
 using Proyecto_Progra_II.Models;
 using Services.Interfaces;
+using System.Security.Claims;
 
 namespace Proyecto_Progra_II.Controllers
 {
@@ -57,10 +58,12 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(cita);
         }
 
+        /*
         [HttpGet]
         [Route("/UsuarioCitas")]
-        public async Task<IActionResult> GetCitas(int idUsuario)
+        public async Task<IActionResult> GetCitas(int id)
         {
+                
             var cita = await _citasService.GetCitasUsuarios(idUsuario);
 
             if (cita == null)
@@ -70,9 +73,26 @@ namespace Proyecto_Progra_II.Controllers
 
             return Ok(cita);
         }
+        */
+        [Authorize]
+        [HttpGet]
+        [Route("/UsuarioCitas")]
+        public async Task<IActionResult> GetCitasUsuarioFromToken(string token)
+        {
 
-        
-        
+            int id = Int32.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            var cita = await _citasService.GetCitasUsuarios(id);
+
+            if (cita == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(cita);
+        }
+
+
         [HttpPut("{id}")]
         //[Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> PutCita(int id, Cita cita)

@@ -9,6 +9,8 @@ namespace Services.Interfaces
         Task<Cita> GetCitas(int id);
         Task<List<Cita>> GetCitasUsuarios(int idUsuario);
 
+        //Task<List<Cita>> GetCitasUsuarioFromToken(string token);
+
         Task<Cita> PostCita(Cita cita);
 
         Task<Cita> PutCita(int id, Cita cita);

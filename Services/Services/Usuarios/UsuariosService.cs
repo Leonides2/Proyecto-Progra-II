@@ -50,6 +50,11 @@ namespace Proyecto_Progra_II.Services.Usuarios
 
          async public Task<Usuario> PostUsuario(Usuario usuario)
         {
+  
+            if (_context.Usuarios.Any( item => item.Email.Equals(usuario.Email)))
+            {
+                return null;
+            }
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 

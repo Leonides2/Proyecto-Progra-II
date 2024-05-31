@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.Models.Custom;
 using Proyecto_Progra_II.Models;
 using Services.Interfaces;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Proyecto_Progra_II.Controllers
 {
@@ -13,12 +16,14 @@ namespace Proyecto_Progra_II.Controllers
         private readonly IUsuariosService _usuariosService;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _config;
+        private readonly ApiContext _context;
 
-        public UsuarioController(IUsuariosService usuariosService, IEmailService emailService, IConfiguration config)
+        public UsuarioController(IUsuariosService usuariosService, IEmailService emailService, IConfiguration config, ApiContext context)
         {
             _usuariosService = usuariosService;
             _emailService = emailService;
             _config = config;
+            _context = context;
         }
 
 
@@ -38,8 +43,6 @@ namespace Proyecto_Progra_II.Controllers
         }
 
 
-        [AllowAnonymous]
-        [HttpGet("{id}")]
         public async Task<IActionResult> GetUsuarios(int id)
         {
             var usuario = await _usuariosService.GetUsuarios(id);
@@ -50,6 +53,19 @@ namespace Proyecto_Progra_II.Controllers
             }
 
             return Ok(usuario);
+        }
+
+        [HttpPost("{Jtoken}")]
+        public async Task<IActionResult> GetUserFromToken(string Jtoken)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var  jsonToken = handler.ReadToken(Jtoken);
+            var token = jsonToken as JwtSecurityToken;
+            var userEmail = token.Claims.FirstOrDefault(item => item.Type == "Name").Value;
+
+            int userId = _context.Usuarios.FirstOrDefault(item => item.Email == userEmail).Id;
+
+            return await GetUsuarios(userId);  
         }
 
         //[Authorize(Policy = "UserPolicy")]
@@ -82,6 +98,11 @@ namespace Proyecto_Progra_II.Controllers
             usuario.IdRol = 2;
 
             var newUsuario = await _usuariosService.PostUsuario(usuario);
+
+            if(newUsuario == null)
+            {
+                return BadRequest("Email already in use");
+            }
 
             string subject = "Bienvenido a nuestra clinica";
             string message = $"Hola {usuario.Name}, bienvenido a nuestra aplicación.";
