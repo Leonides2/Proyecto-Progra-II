@@ -12,6 +12,7 @@ using Services.Services.Sucursales;
 using Models.Models.Custom;
 using Services.Services.Email;
 using Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +46,13 @@ builder.Services.AddScoped<IEstadoCitaService, EstadoCitaService>();
 builder.Services.AddScoped<IRolesService, RolesService>();
 builder.Services.AddScoped<ISucursalService, SucursalService>();
 
-builder.Services.AddAuthentication("Bearer").AddJwtBearer(config =>
+builder.Services.AddAuthentication(cfg =>
+{
+    cfg.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    cfg.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    cfg.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+
+}).AddJwtBearer(config =>
 {
     config.RequireHttpsMetadata = false;
     config.SaveToken = true;
@@ -55,20 +62,18 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer(config =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:key"])),
         ValidateIssuer = false,
         ValidateAudience = false,
-        ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero
     };
 });
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
+   options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+   options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
 });
 
 var app = builder.Build();
 
-app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -78,6 +83,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();

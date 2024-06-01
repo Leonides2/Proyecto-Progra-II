@@ -22,20 +22,18 @@ namespace Proyecto_Progra_II.Services.Login
         private string generateToken(string username, string role, string secret)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.Role, role) // Incluir el rol en los claims
             };
 
             var token = new JwtSecurityToken(
-                issuer: null,
-                audience: null,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                notBefore: DateTime.UtcNow,
+                expires: DateTime.UtcNow.AddMinutes(30),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

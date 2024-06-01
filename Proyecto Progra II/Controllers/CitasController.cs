@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace Proyecto_Progra_II.Controllers
 {
-
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CitasController : ControllerBase
@@ -28,7 +28,7 @@ namespace Proyecto_Progra_II.Controllers
 
         
         [HttpGet]
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetCitas()
         {
             var citas_request = await _citasService.GetCitas();
@@ -45,7 +45,7 @@ namespace Proyecto_Progra_II.Controllers
         
         
         [HttpGet("{id}")]
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetCita(int id)
         {
             var cita = await _citasService.GetCitas(id);
@@ -74,7 +74,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(cita);
         }
         */
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         [Route("/UsuarioCitas")]
         public async Task<IActionResult> GetCitasUsuarioFromToken(string token)
@@ -94,7 +94,7 @@ namespace Proyecto_Progra_II.Controllers
 
 
         [HttpPut("{id}")]
-        //[Authorize(Policy = "UserPolicy")]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> PutCita(int id, Cita cita)
         {
             if (id != cita.Id)
@@ -132,7 +132,7 @@ namespace Proyecto_Progra_II.Controllers
 
         
         [HttpPost]
-        //[Authorize(Policy = "UserPolicy")]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> PostCita(Cita cita)
         {
             var user = await _context.Usuarios.FindAsync(cita.IdPaciente);
