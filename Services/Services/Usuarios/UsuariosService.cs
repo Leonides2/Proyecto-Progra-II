@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Proyecto_Progra_II.Models;
 using Services.Interfaces;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Proyecto_Progra_II.Services.Usuarios
 {
@@ -68,6 +70,20 @@ namespace Proyecto_Progra_II.Services.Usuarios
 
 
             return usuario;
+        }
+
+        async public Task<Usuario> ReadUsuarioToken(string Jtoken)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(Jtoken);
+            var token = jsonToken as JwtSecurityToken;
+            var userEmail = token.Claims.FirstOrDefault(item => item.Type == ClaimTypes.Name)!.Value;
+
+            int userId =  _context.Usuarios.FirstOrDefaultAsync(item => item.Email == userEmail).Id;
+
+            var user = GetUsuarios(userId);
+
+            return await user;
         }
     }
 }

@@ -58,14 +58,9 @@ namespace Proyecto_Progra_II.Controllers
         [HttpPost("{Jtoken}")]
         public async Task<IActionResult> GetUserFromToken(string Jtoken)
         {
-            var handler = new JwtSecurityTokenHandler();
-            var  jsonToken = handler.ReadToken(Jtoken);
-            var token = jsonToken as JwtSecurityToken;
-            var userEmail = token.Claims.FirstOrDefault(item => item.Type == ClaimTypes.Name).Value;
+            var user = await  _usuariosService.ReadUsuarioToken(Jtoken);
 
-            int userId = _context.Usuarios.FirstOrDefault(item => item.Email == userEmail).Id;
-
-            return await GetUsuarios(userId);  
+            return Ok(user);  
         }
 
         //[Authorize(Policy = "UserPolicy")]
@@ -89,11 +84,13 @@ namespace Proyecto_Progra_II.Controllers
         [HttpPost]
         public async Task<IActionResult> PostUsuario(Usuario usuario)
         {
-            SmtpSettings settings = new SmtpSettings();
-            settings.Port = _config.GetValue<int>("SmtpSettings:Port");
-            settings.Server = _config.GetValue<string>("SmtpSettings:Server");
-            settings.Username = _config.GetValue<string>("SmtpSettings:Username");
-            settings.Password = _config.GetValue<string>("SmtpSettings:Password");
+            SmtpSettings settings = new()
+            {
+                Port = _config.GetValue<int>("SmtpSettings:Port"),
+                Server = _config.GetValue<string>("SmtpSettings:Server"),
+                Username = _config.GetValue<string>("SmtpSettings:Username"),
+                Password = _config.GetValue<string>("SmtpSettings:Password")
+            };
 
             usuario.IdRol = 2;
 
@@ -118,8 +115,8 @@ namespace Proyecto_Progra_II.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsuario(int id)
         {
-            var cita = await _usuariosService.DeleteUsuario(id);
-            if (cita == null)
+            var user = await _usuariosService.DeleteUsuario(id);
+            if (user == null)
             {
                 return NotFound();
             }

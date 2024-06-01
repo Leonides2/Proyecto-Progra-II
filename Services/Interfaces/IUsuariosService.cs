@@ -8,7 +8,7 @@ namespace Services.Interfaces
         Task<List<Usuario>> GetUsuarios();
         Task<Usuario> GetUsuarios(int id);
 
-        //Task<Usuario> GetUserFromToken(string token);
+        Task<Usuario> ReadUsuarioToken(string Jtoken);
 
         Task<Usuario> PostUsuario(Usuario usuario);
 
