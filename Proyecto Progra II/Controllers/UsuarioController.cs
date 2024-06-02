@@ -27,8 +27,7 @@ namespace Proyecto_Progra_II.Controllers
         }
 
 
-        //[Authorize(Policy = "AdminPolicy")]
-        [Authorize]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpGet]
         public async Task<IActionResult> GetUsuarios()
         {
@@ -42,6 +41,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(usuarios_request);
         }
 
+        [Authorize(Policy = "UserPolicy")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUsuarios(int id)
         {
@@ -55,6 +55,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(usuario);
         }
 
+        [AllowAnonymous]
         [HttpPost("{Jtoken}")]
         public async Task<IActionResult> GetUserFromToken(string Jtoken)
         {
@@ -63,7 +64,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(user);  
         }
 
-        //[Authorize(Policy = "UserPolicy")]
+        [Authorize(Policy = "UserPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
         {
@@ -80,7 +81,7 @@ namespace Proyecto_Progra_II.Controllers
 
         }
 
-        [AllowAnonymous]
+        [Authorize(Policy = "UserPolicy")]
         [HttpPost]
         public async Task<IActionResult> PostUsuario(Usuario usuario)
         {

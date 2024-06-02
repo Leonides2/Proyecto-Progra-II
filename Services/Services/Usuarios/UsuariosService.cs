@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Models.Models.Custom;
 using Proyecto_Progra_II.Models;
 using Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
@@ -32,14 +33,20 @@ namespace Proyecto_Progra_II.Services.Usuarios
             return usuario;
         }
 
- 
 
-        async public Task<List<Usuario>> GetUsuarios()
+        async public Task<List<UsuarioListObject>> GetUsuarios()
         {
-            var ListUsuarios = new List<Usuario>();
-            ListUsuarios = await _context.Usuarios.ToListAsync();
+            var ListUsuarios =  _context.Usuarios.ToList();
 
-            return ListUsuarios;
+            var List = ListUsuarios.Select(item => new UsuarioListObject
+            {
+                Id = item.Id,
+                Name = item.Name,
+                Email = item.Email,
+                Telefono = item.Telefono,
+            }).ToList();
+      
+            return List;
         }
 
         async public Task<Usuario> GetUsuarios(int id)
