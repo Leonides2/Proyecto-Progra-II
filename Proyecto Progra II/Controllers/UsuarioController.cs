@@ -81,7 +81,7 @@ namespace Proyecto_Progra_II.Controllers
 
         }
 
-        [Authorize(Policy = "UserPolicy")]
+       
         [HttpPost]
         public async Task<IActionResult> PostUsuario(Usuario usuario)
         {
