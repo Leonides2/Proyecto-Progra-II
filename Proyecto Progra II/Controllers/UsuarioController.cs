@@ -103,7 +103,7 @@ namespace Proyecto_Progra_II.Controllers
             }
 
             string subject = "Bienvenido a nuestra clinica";
-            string message = $"Hola {usuario.Name}, bienvenido a nuestra aplicación.";
+            string message = $"Hola {usuario.Name}, bienvenido a nuestra aplicación. Su correo es {usuario.Email}, y su telefono es {usuario.Telefono}";
             string table = "";
 
             await _emailService.SendEmailAsync(usuario.Email, subject, message, settings, table);

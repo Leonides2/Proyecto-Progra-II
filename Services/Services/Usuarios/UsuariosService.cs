@@ -86,11 +86,11 @@ namespace Proyecto_Progra_II.Services.Usuarios
             var token = jsonToken as JwtSecurityToken;
             var userEmail = token.Claims.FirstOrDefault(item => item.Type == ClaimTypes.Name)!.Value;
 
-            int userId =  _context.Usuarios.FirstOrDefaultAsync(item => item.Email == userEmail).Id;
+            var user =  await _context.Usuarios.FirstOrDefaultAsync(item => item.Email == userEmail);
 
-            var user = GetUsuarios(userId);
+            //var user = GetUsuarios(userId);
 
-            return await user;
+            return user;
         }
     }
 }

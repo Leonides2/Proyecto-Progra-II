@@ -20,7 +20,7 @@ namespace Proyecto_Progra_II.Controllers
         }
 
 
-        [AllowAnonymous]
+        
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] UsuarioRequest request)
         {
