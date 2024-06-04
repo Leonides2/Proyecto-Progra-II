@@ -58,13 +58,14 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(cita);
         }
 
-        /*
+        
         [HttpGet]
+        [Authorize(Policy = "UserPolicy")]
         [Route("/UsuarioCitas")]
         public async Task<IActionResult> GetCitas(int id)
         {
                 
-            var cita = await _citasService.GetCitasUsuarios(idUsuario);
+            var cita = await _citasService.GetCitasUsuarios(id);
 
             if (cita == null)
             {
@@ -73,16 +74,14 @@ namespace Proyecto_Progra_II.Controllers
 
             return Ok(cita);
         }
-        */
-        [AllowAnonymous]
+
         [HttpGet]
-        [Route("/UsuarioCitas")]
-        public async Task<IActionResult> GetCitasUsuarioFromToken(string token)
+        [Authorize(Policy = "UserPolicy")]
+        [Route("/Hoy")]
+        public async Task<IActionResult> GetTodayUserCitas(int id)
         {
 
-            int id = Int32.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-            var cita = await _citasService.GetCitasUsuarios(id);
+            var cita = await _citasService.getTodayUserCitas(id);
 
             if (cita == null)
             {
@@ -135,6 +134,26 @@ namespace Proyecto_Progra_II.Controllers
         [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> PostCita(Cita cita)
         {
+
+            switch (cita.IdEspecialidad)
+            {
+                case 1:
+                    cita.Lugar = "Consultorio 1";
+                    break;
+                case 2:
+                    cita.Lugar = "Consultorio 6";
+                    break;
+                case 3:
+                    cita.Lugar = "Consultorio 3";
+                    break;
+                case 4:
+                    cita.Lugar = "Consultorio 4";
+                    break;
+                default:
+                    return BadRequest();
+
+            }
+
             var user = await _context.Usuarios.FindAsync(cita.IdPaciente);
             var sucursal = await _context.Sucursales.FindAsync(cita.IdSucursal);
             var especialidad = await _context.Especialidades.FindAsync(cita.IdEspecialidad);
