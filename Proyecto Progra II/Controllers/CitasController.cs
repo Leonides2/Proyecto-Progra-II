@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace Proyecto_Progra_II.Controllers
 {
-    [Authorize]
+
     [Route("api/[controller]")]
     [ApiController]
     public class CitasController : ControllerBase
