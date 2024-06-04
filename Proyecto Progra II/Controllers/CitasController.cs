@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models.Models.Custom;
 using Proyecto_Progra_II.Models;
 using Services.Interfaces;
+using System.Data;
 using System.Security.Claims;
 
 namespace Proyecto_Progra_II.Controllers
@@ -103,8 +104,8 @@ namespace Proyecto_Progra_II.Controllers
 
             if (cita.IdEstado == 2)
             {
-                DateTime date = DateTime.Now;
-                TimeSpan timeSpan = cita.Fecha.Subtract(date);
+                DateTime dateNow = DateTime.Now;
+                TimeSpan timeSpan = cita.Fecha.Subtract(dateNow);
 
                 if (timeSpan.TotalHours < 24 )
                 {
@@ -112,6 +113,55 @@ namespace Proyecto_Progra_II.Controllers
 
                 }else
                 {
+
+                    var user = await _context.Usuarios.FindAsync(cita.IdPaciente);
+                    var sucursal = await _context.Sucursales.FindAsync(cita.IdSucursal);
+                    var especialidad = await _context.Especialidades.FindAsync(cita.IdEspecialidad);
+                    var estado = await _context.EstadosCitas.FindAsync(cita.IdEstado);
+                    var date = cita.Fecha;
+
+                    SmtpSettings settings = new SmtpSettings();
+                    settings.Port = _configuration.GetValue<int>("SmtpSettings:Port");
+                    settings.Server = _configuration.GetValue<string>("SmtpSettings:Server");
+                    settings.Username = _configuration.GetValue<string>("SmtpSettings:Username");
+                    settings.Password = _configuration.GetValue<string>("SmtpSettings:Password");
+
+                    string subject = "Resumen de los nuevos datos de su cita";
+                    string message = $"Hola {user.Name}, aqui tienes un resumen de los datos modificados de su cita el dia " + dateNow.ToShortDateString() + " .";
+                    string table = "<table>\r\n        " +
+                        "<tr>\r\n            " +
+                            "<th> </th>\r\n            " +
+                            "<th>Datos</th>\r\n        " +
+                        "</tr>\r\n        " +
+                        "<tr>\r\n           " +
+                            "<td> Fecha </td>\r\n           " +
+                            "<td> " + date.ToShortDateString() + " </td>\r\n        " +
+                        "</tr>\r\n    " +
+                        "<tr>\r\n           " +
+                            "<td> Hora </td>\r\n           " +
+                            "<td> " + date.ToShortTimeString() + " </td>\r\n        " +
+                        "</tr>\r\n    " +
+                        "<tr>\r\n           " +
+                            "<td> Especialidad </td>\r\n           " +
+                            "<td> " + especialidad.Nombre + " </td>\r\n        " +
+                        "</tr>\r\n    " +
+                        "<tr>\r\n           " +
+                            "<td> Sucursal </td>\r\n           " +
+                            "<td> " + sucursal.NombreSucursal + " </td>\r\n        " +
+                        "</tr>\r\n    " +
+                         "<tr>\r\n           " +
+                            "<td> Lugar </td>\r\n           " +
+                            "<td> " + cita.Lugar + " </td>\r\n        " +
+                        "</tr>\r\n    " +
+                        "<tr>\r\n           " +
+                            "<td> Estado </td>\r\n           " +
+                            "<td> " + estado.NombreEstado + " </td>\r\n        " +
+                        "</tr>\r\n    " +
+                        "</table>\r\n\r\n    ";
+
+
+                    await _emailService.SendEmailAsync(user.Email, subject, message, settings, table);
+
                     var newCita = await _citasService.PutCita(id, cita);
 
                     return Ok(newCita);
@@ -192,11 +242,11 @@ namespace Proyecto_Progra_II.Controllers
                         "</tr>\r\n        " +
                         "<tr>\r\n           " +
                             "<td> Fecha </td>\r\n           " +
-                            "<td> " + date.ToLocalTime().ToShortDateString() + " </td>\r\n        " +
+                            "<td> " + date.ToShortDateString() + " </td>\r\n        " +
                         "</tr>\r\n    " +
                         "<tr>\r\n           " +
                             "<td> Hora </td>\r\n           " +
-                            "<td> " + date.ToLocalTime().ToShortTimeString() + " </td>\r\n        " +
+                            "<td> " + date.ToShortTimeString() + " </td>\r\n        " +
                         "</tr>\r\n    " +
                         "<tr>\r\n           " +
                             "<td> Especialidad </td>\r\n           " +
