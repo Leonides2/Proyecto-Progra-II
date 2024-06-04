@@ -57,6 +57,25 @@ namespace Proyecto_Progra_II.Services.Citas
 
         async public Task<Cita> PostCita(Cita cita)
         {
+
+            if (!_context.Usuarios.Any(item => item.Id == cita.IdPaciente))
+            {
+                return null;
+
+            }else if (!_context.Especialidades.Any(item => item.Id == cita.IdEspecialidad))
+            {
+                return null;
+
+            }else if(!_context.Sucursales.Any(item => item.Id == cita.IdSucursal)){
+
+                return null;
+
+            }else if( !_context.EstadosCitas.Any(item => item.Id == cita.IdEstado))
+            {
+
+                return null;
+
+            }
             _context.Citas.Add(cita);
             await _context.SaveChangesAsync();
 

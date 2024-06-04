@@ -170,48 +170,56 @@ namespace Proyecto_Progra_II.Controllers
 
                 var newCita = await _citasService.PostCita(cita);
 
-                SmtpSettings settings = new SmtpSettings();
-                settings.Port = _configuration.GetValue<int>("SmtpSettings:Port");
-                settings.Server = _configuration.GetValue<string>("SmtpSettings:Server");
-                settings.Username = _configuration.GetValue<string>("SmtpSettings:Username");
-                settings.Password = _configuration.GetValue<string>("SmtpSettings:Password");
+                if (newCita == null)
+                {
+                    return BadRequest();
+                }
+                else {
+                    SmtpSettings settings = new SmtpSettings();
+                    settings.Port = _configuration.GetValue<int>("SmtpSettings:Port");
+                    settings.Server = _configuration.GetValue<string>("SmtpSettings:Server");
+                    settings.Username = _configuration.GetValue<string>("SmtpSettings:Username");
+                    settings.Password = _configuration.GetValue<string>("SmtpSettings:Password");
 
-                string subject = "Resumen de su nueva cita";
-                string message = $"Hola {user.Name}, aqui tienes un resumen de tu cita agendada el dia " + dateNow.ToShortDateString() + " .";
-                string table = "<table>\r\n        " +
-                    "<tr>\r\n            " +
-                        "<th> </th>\r\n            " +
-                        "<th>Datos</th>\r\n        " +
-                    "</tr>\r\n        " +
-                    "<tr>\r\n           " +
-                        "<td> Fecha </td>\r\n           " +
-                        "<td> " + date.ToLocalTime().ToShortDateString() + " </td>\r\n        " +
-                    "</tr>\r\n    " +
-                    "<tr>\r\n           " +
-                        "<td> Hora </td>\r\n           " +
-                        "<td> " + date.ToLocalTime().ToShortTimeString() + " </td>\r\n        " +
-                    "</tr>\r\n    " +
-                    "<tr>\r\n           " +
-                        "<td> Especialidad </td>\r\n           " +
-                        "<td> " + especialidad.Nombre + " </td>\r\n        " +
-                    "</tr>\r\n    " +
-                    "<tr>\r\n           " +
-                        "<td> Sucursal </td>\r\n           " +
-                        "<td> " + sucursal.NombreSucursal + " </td>\r\n        " +
-                    "</tr>\r\n    " +
-                     "<tr>\r\n           " +
-                        "<td> Lugar </td>\r\n           " +
-                        "<td> " + cita.Lugar + " </td>\r\n        " +
-                    "</tr>\r\n    " +
-                    "<tr>\r\n           " +
-                        "<td> Estado </td>\r\n           " +
-                        "<td> " + estado.NombreEstado + " </td>\r\n        " +
-                    "</tr>\r\n    " +
-                    "</table>\r\n\r\n    ";
+                    string subject = "Resumen de su nueva cita";
+                    string message = $"Hola {user.Name}, aqui tienes un resumen de tu cita agendada el dia " + dateNow.ToShortDateString() + " .";
+                    string table = "<table>\r\n        " +
+                        "<tr>\r\n            " +
+                            "<th> </th>\r\n            " +
+                            "<th>Datos</th>\r\n        " +
+                        "</tr>\r\n        " +
+                        "<tr>\r\n           " +
+                            "<td> Fecha </td>\r\n           " +
+                            "<td> " + date.ToLocalTime().ToShortDateString() + " </td>\r\n        " +
+                        "</tr>\r\n    " +
+                        "<tr>\r\n           " +
+                            "<td> Hora </td>\r\n           " +
+                            "<td> " + date.ToLocalTime().ToShortTimeString() + " </td>\r\n        " +
+                        "</tr>\r\n    " +
+                        "<tr>\r\n           " +
+                            "<td> Especialidad </td>\r\n           " +
+                            "<td> " + especialidad.Nombre + " </td>\r\n        " +
+                        "</tr>\r\n    " +
+                        "<tr>\r\n           " +
+                            "<td> Sucursal </td>\r\n           " +
+                            "<td> " + sucursal.NombreSucursal + " </td>\r\n        " +
+                        "</tr>\r\n    " +
+                         "<tr>\r\n           " +
+                            "<td> Lugar </td>\r\n           " +
+                            "<td> " + cita.Lugar + " </td>\r\n        " +
+                        "</tr>\r\n    " +
+                        "<tr>\r\n           " +
+                            "<td> Estado </td>\r\n           " +
+                            "<td> " + estado.NombreEstado + " </td>\r\n        " +
+                        "</tr>\r\n    " +
+                        "</table>\r\n\r\n    ";
 
 
-                await _emailService.SendEmailAsync(user.Email, subject, message, settings, table);
-                return Ok(newCita);
+                    await _emailService.SendEmailAsync(user.Email, subject, message, settings, table);
+                    return Ok(newCita);
+                }
+
+                
             }
         }
 
