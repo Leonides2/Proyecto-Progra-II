@@ -162,7 +162,7 @@ namespace Proyecto_Progra_II.Controllers
 
             if (_citasService.HasCitaTheSameDay(cita))
             {
-                return BadRequest("The user has another cita the same day");
+                return BadRequest("The user has another appointment the same day");
             }
             else {
 

@@ -55,7 +55,7 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(usuario);
         }
 
-        [AllowAnonymous]
+        [Authorize(Policy = "UserPolicy")]
         [HttpPost("{Jtoken}")]
         public async Task<IActionResult> GetUserFromToken(string Jtoken)
         {
