@@ -26,7 +26,7 @@ namespace Proyecto_Progra_II.Controllers
         }
 
 
-        
+
         [HttpGet]
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetCitas()
@@ -42,8 +42,8 @@ namespace Proyecto_Progra_II.Controllers
         }
 
 
-        
-        
+
+
         [HttpGet("{id}")]
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetCita(int id)
@@ -58,10 +58,10 @@ namespace Proyecto_Progra_II.Controllers
             return Ok(cita);
         }
 
-        
+
         [HttpGet]
         [Authorize(Policy = "UserPolicy")]
-        [Route("/UsuarioCitas")]
+        [Route("/UsuarioCitas/" + "{id}")]
         public async Task<IActionResult> GetCitas(int id)
         {
                 
@@ -69,7 +69,7 @@ namespace Proyecto_Progra_II.Controllers
 
             if (cita == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return Ok(cita);
