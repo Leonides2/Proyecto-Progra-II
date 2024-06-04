@@ -69,7 +69,7 @@ namespace Proyecto_Progra_II.Controllers
 
             if (cita == null)
             {
-                return NoContent();
+                return Ok(new List<Cita>());
             }
 
             return Ok(cita);
