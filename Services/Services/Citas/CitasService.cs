@@ -111,7 +111,7 @@ namespace Proyecto_Progra_II.Services.Citas
 
         public async Task<List<Cita>> getTodayUserCitas() {
             var today = DateTime.Now;
-            var citas = _context.Citas.Where(item => item.Fecha.DayOfYear == today.DayOfYear)!.ToList();
+            var citas = _context.Citas.Where(item => item.Fecha.DayOfYear == today.DayOfYear  && item.Fecha.Year == today.Year)!.ToList();
 
             if (citas == null)
             {
