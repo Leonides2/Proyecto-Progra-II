@@ -154,6 +154,8 @@ namespace Proyecto_Progra_II.Controllers
 
             }
 
+            cita.IdEstado = 1;
+
             var user = await _context.Usuarios.FindAsync(cita.IdPaciente);
             var sucursal = await _context.Sucursales.FindAsync(cita.IdSucursal);
             var especialidad = await _context.Especialidades.FindAsync(cita.IdEspecialidad);
