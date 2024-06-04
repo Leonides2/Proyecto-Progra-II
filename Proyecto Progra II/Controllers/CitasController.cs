@@ -77,11 +77,11 @@ namespace Proyecto_Progra_II.Controllers
 
         [HttpGet]
         [Authorize(Policy = "AdminPolicy")]
-        [Route("/Hoy")]
-        public async Task<IActionResult> GetTodayUserCitas()
+        [Route("/Hoy" + "{id}")]
+        public async Task<IActionResult> GetTodayUserCitas(int id)
         {
 
-            var cita = await _citasService.getTodayUserCitas();
+            var cita = await _citasService.getTodayUserCitas(id);
 
             if (cita == null)
             {
