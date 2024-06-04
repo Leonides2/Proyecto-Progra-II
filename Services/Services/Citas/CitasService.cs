@@ -109,18 +109,13 @@ namespace Proyecto_Progra_II.Services.Citas
             return false;
         }
 
-        public async Task<List<Cita>> getTodayUserCitas(int id) {
+        public async Task<List<Cita>> getTodayUserCitas() {
             var today = DateTime.Now;
-            var user = _context.Usuarios.FirstOrDefault(item => item.Id == id);
-            var citas = _context.Citas.Where(item => item.IdPaciente == id && item.Fecha.DayOfYear == today.DayOfYear)!.ToList();
+            var citas = _context.Citas.Where(item => item.Fecha.DayOfYear == today.DayOfYear)!.ToList();
 
-            if (user == null)
-            {
-                return null;
-            }
             if (citas == null)
             {
-                return null;
+                return new List<Cita>();
             }
 
             return citas;
