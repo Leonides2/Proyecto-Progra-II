@@ -86,11 +86,22 @@ namespace Proyecto_Progra_II.Services.Citas
 
         async public Task<Cita> PutCita(int id, Cita cita)
         {
-            _context.Entry(cita).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-      
+            var existingCita = await _context.Citas.FindAsync(id);
+            if (existingCita == null)
+            {
+                return null;
+            }
 
-            return cita; 
+            existingCita.Lugar = cita.Lugar;
+            existingCita.Fecha = cita.Fecha;
+            existingCita.IdEspecialidad = cita.IdEspecialidad;
+            existingCita.IdEstado = cita.IdEstado;
+            existingCita.IdPaciente = cita.IdPaciente;
+            existingCita.IdSucursal = cita.IdSucursal;
+
+
+            await _context.SaveChangesAsync();
+            return existingCita;
         }
 
         public bool HasCitaTheSameDay(Cita cita) {
