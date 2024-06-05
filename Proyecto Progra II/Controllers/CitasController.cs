@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using Models.Models.Custom;
 using Proyecto_Progra_II.Models;
 using Services.Interfaces;
@@ -107,11 +108,15 @@ namespace Proyecto_Progra_II.Controllers
                 DateTime dateNow = DateTime.Now;
                 TimeSpan timeSpan = cita.Fecha.Subtract(dateNow);
 
-                if (timeSpan.TotalHours < 24 )
+                if (timeSpan.TotalHours < 24)
                 {
-                    return BadRequest("can't cancel cita");
+                    return BadRequest(new JsonResult("can't cancel appointment scheduled for 24 hours from the current time"));
 
-                }else
+                } else if (_citasService.HasCitaTheSameDay(cita)) 
+                {
+                    return BadRequest( new JsonResult("The user has another appointment the same day"));
+                }
+                else
                 {
 
                     var user = await _context.Usuarios.FindAsync(cita.IdPaciente);
@@ -169,6 +174,10 @@ namespace Proyecto_Progra_II.Controllers
             }
             else
             {
+                if (_citasService.HasCitaTheSameDay(cita))
+                {
+                    return BadRequest( new JsonResult("The user has another appointment the same day"));
+                }
                 var newCita = await _citasService.PutCita(id, cita);
 
                 return Ok(newCita);
@@ -214,7 +223,7 @@ namespace Proyecto_Progra_II.Controllers
 
             if (_citasService.HasCitaTheSameDay(cita))
             {
-                return BadRequest("The user has another appointment the same day");
+                return BadRequest(new JsonResult("The user has another appointment the same day"));
             }
             else {
 
