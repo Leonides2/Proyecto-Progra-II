@@ -65,7 +65,7 @@ namespace Services.Services.Email
 
                 mailMessage.To.Add( new MailAddress(Email));
 
-                await client.SendMailAsync(mailMessage);
+                client.SendMailAsync(mailMessage);
 
             }
             catch (Exception ex) 
