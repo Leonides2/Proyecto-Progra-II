@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using Models.Models.Custom;
 using Proyecto_Progra_II.Models;
 using Services.Interfaces;
@@ -286,7 +287,7 @@ namespace Proyecto_Progra_II.Controllers
                 return NotFound();
             }
 
-            return Ok("Cita deleted succesfully");
+            return Ok(cita);
         }
 
     }
