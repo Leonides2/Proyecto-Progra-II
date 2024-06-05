@@ -295,7 +295,7 @@ namespace Proyecto_Progra_II.Controllers
                 return NotFound();
             }
 
-            return Ok("Cita deleted succesfully");
+            return Ok(cita);
         }
 
     }
