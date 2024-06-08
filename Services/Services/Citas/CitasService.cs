@@ -108,7 +108,7 @@ namespace Proyecto_Progra_II.Services.Citas
 
 
             var userDb = _context.Usuarios.FirstOrDefault(item => item.Id == cita.IdPaciente)!;
-            var ListCita = _context.Citas.Where(item => item.IdPaciente == userDb.Id).ToList();
+            var ListCita = _context.Citas.Where(item => item.IdPaciente == userDb.Id && item.Id != cita.Id).ToList();
             var hasCita = ListCita.Find(item => item.Fecha.DayOfYear == cita.Fecha.DayOfYear);
 
             if (hasCita != null)
